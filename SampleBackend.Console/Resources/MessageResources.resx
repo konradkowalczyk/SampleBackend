@@ -121,7 +121,7 @@
     <value>Please press key to select route: {0}1 for London-Dublin{0}2 for Los Angeles-San Francisco{0}3 for Melbourne-Sydney{0}</value>
   </data>
   <data name="FeedbackMessageFailConsole" xml:space="preserve">
-    <value>Calculation failed - no such route available</value>
+    <value>{0}Could not retrieve such flight information.</value>
   </data>
   <data name="FeedbackMessageSuccessConsole" xml:space="preserve">
     <value>{2}Distance for this flight is: {0} km {2}Estimated time for the trip: {1} hour(s) {2}Nearest flight on {3} with {4} free seats available.</value>

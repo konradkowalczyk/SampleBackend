@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Unity;
+using Unity.log4net;
 
 namespace SampleBackend.BusinessLayer
 {
@@ -14,6 +15,7 @@ namespace SampleBackend.BusinessLayer
 
         public static void Initialize()
         {
+            _container.AddNewExtension<Log4NetExtension>();
             _container.RegisterType<IFlightService, FlightsService>();
             _container.RegisterType<IFlightRepository, FlightRepository>();
         }

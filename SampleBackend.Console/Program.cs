@@ -12,16 +12,27 @@ namespace SampleBackend
     {
         static void Main(string[] args)
         {
+            log4net.Config.XmlConfigurator.Configure();
             ComponentManager.Initialize();
 
-            Console.WriteLine(
-                string.Format(MessageResources.ChooseRouteMessageConsole,
-                Environment.NewLine));
+            var choice = PrompForChoice();
+            while (!ValidateKeyPress(choice))
+            {
+                Console.WriteLine();
+                choice = PrompForChoice();
+            }
 
-            var result = QueryForSelectedFlight(Console.ReadKey().KeyChar.ToString());
+            var result = QueryForSelectedFlight(choice);
             DisplayFeedbackMessage(result);
 
             Console.ReadKey();
+        }
+
+        private static string PrompForChoice() {
+            Console.WriteLine(
+                string.Format(MessageResources.ChooseRouteMessageConsole,
+                Environment.NewLine));
+            return Console.ReadKey().KeyChar.ToString();
         }
 
         private static void DisplayFeedbackMessage(FlightDetailsResponse result)
@@ -30,13 +41,13 @@ namespace SampleBackend
                 Console.WriteLine(string.Format(MessageResources.FeedbackMessageSuccessConsole,
             result.Distance, result.EstimatedLengthInHrs, Environment.NewLine, result.NearestFlightDate.ToShortDateString(), result.FreeSeatsCount));
             else
-                Console.WriteLine(MessageResources.FeedbackMessageFailConsole);
+                Console.WriteLine(string.Format(MessageResources.FeedbackMessageFailConsole, Environment.NewLine));
         }
 
         private static FlightDetailsResponse QueryForSelectedFlight(string choice)
         {
-            var flightsService = ComponentManager.GetInstance<IFlightService>();
             FlightDetailsResponse result = null;
+            var flightsService = ComponentManager.GetInstance<IFlightService>();
 
             switch (choice)
             {
@@ -51,6 +62,11 @@ namespace SampleBackend
                     break;
             }
             return result;
+        }
+
+        private static bool ValidateKeyPress(string key)
+        {
+            return (key.Equals("1") || key.Equals("2") || key.Equals("3"));
         }
     }
 }

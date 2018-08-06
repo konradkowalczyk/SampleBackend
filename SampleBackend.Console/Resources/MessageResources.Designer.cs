@@ -70,7 +70,7 @@ namespace SampleBackend.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Calculation failed - no such route available.
+        ///   Looks up a localized string similar to {0}Could not retrieve such flight information..
         /// </summary>
         internal static string FeedbackMessageFailConsole {
             get {
