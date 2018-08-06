@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace SampleBackend.BusinessLayer
 {
-    public class FlightCalculationResult
+    public class FlightDetailsResponse
     {
         public decimal Distance { get; set; }
         public decimal EstimatedLengthInHrs { get; set; }
-        public decimal EstimatedCost { get; set; }
+        public DateTime NearestFlightDate { get; set; }
+        public int FreeSeatsCount { get; set; }
         public bool Success { get; set; }
     }
 }

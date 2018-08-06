@@ -1,4 +1,5 @@
 using SampleBackend.BusinessLayer;
+using SampleBackend.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,43 +12,42 @@ namespace SampleBackend
     {
         static void Main(string[] args)
         {
+            ComponentManager.Initialize();
+
             Console.WriteLine(
-                string.Format("Please press key to select route: {0}1 for London-Dublin{0}2 for Los Angeles-San Francisco{0}3 for Melbourne-Sydney{0}",
+                string.Format(MessageResources.ChooseRouteMessageConsole,
                 Environment.NewLine));
-            var result = QueryForSelected(Console.ReadKey().KeyChar.ToString());
-            Console.WriteLine();
-            DisplayMessage(result);
+
+            var result = QueryForSelectedFlight(Console.ReadKey().KeyChar.ToString());
+            DisplayFeedbackMessage(result);
+
             Console.ReadKey();
         }
 
-        private static void DisplayMessage(FlightCalculationResult result)
+        private static void DisplayFeedbackMessage(FlightDetailsResponse result)
         {
             if (result.Success)
-                Console.WriteLine(string.Format(
-            "Distance for this flight is: {0} km {2}Estimated time for the trip: {1} hour(s)",
-            result.Distance, result.EstimatedLengthInHrs, Environment.NewLine));
+                Console.WriteLine(string.Format(MessageResources.FeedbackMessageSuccessConsole,
+            result.Distance, result.EstimatedLengthInHrs, Environment.NewLine, result.NearestFlightDate.ToShortDateString(), result.FreeSeatsCount));
             else
-            {
-                Console.WriteLine("Calculation failed - no such route available");
-            }
-
+                Console.WriteLine(MessageResources.FeedbackMessageFailConsole);
         }
 
-        private static FlightCalculationResult QueryForSelected(string choice)
+        private static FlightDetailsResponse QueryForSelectedFlight(string choice)
         {
-            var calculationService = new FlightCalculationService();
-            FlightCalculationResult result = null;
+            var flightsService = ComponentManager.GetInstance<IFlightService>();
+            FlightDetailsResponse result = null;
 
             switch (choice)
-                {
+            {
                 case "1":
-                    result = calculationService.CalculateFlight("London", "Dublin");
+                    result = flightsService.GetFlightDetails("London", "Dublin");
                     break;
                 case "2":
-                    result = calculationService.CalculateFlight("Los Angeles", "San Francisco");
+                    result = flightsService.GetFlightDetails("Los Angeles", "San Francisco");
                     break;
                 case "3":
-                    result = calculationService.CalculateFlight("Melbourne", "Sydney");
+                    result = flightsService.GetFlightDetails("Melbourne", "Sydney");
                     break;
             }
             return result;
